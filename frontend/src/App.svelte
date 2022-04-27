@@ -1,30 +1,16 @@
 <script lang="ts">
-	export let name: string;
+    import 'filepond/dist/filepond.css';
+    import 'filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css';
+    import MainPage from "./page/MainPage.svelte";
 </script>
 
-<main>
-	<h1>Hello {name}!</h1>
-	<p>Visit the <a href="https://svelte.dev/tutorial">Svelte tutorial</a> to learn how to build Svelte apps.</p>
-</main>
+<MainPage/>
 
 <style>
-	main {
-		text-align: center;
-		padding: 1em;
-		max-width: 240px;
-		margin: 0 auto;
-	}
+    :global(body) {
+        margin: 0;
+        padding: 0;
 
-	h1 {
-		color: #ff3e00;
-		text-transform: uppercase;
-		font-size: 4em;
-		font-weight: 100;
-	}
-
-	@media (min-width: 640px) {
-		main {
-			max-width: none;
-		}
-	}
+        background: #999999;
+    }
 </style>
