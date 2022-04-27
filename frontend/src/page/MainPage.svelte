@@ -21,14 +21,14 @@
 
     const submit = () => {
         if (!files) return;
+        if (files.accepted.length === 0) return;
 
         loading = true;
         const data = new FormData();
         data.append('file', files.accepted[0])
-        fetch('http://localhost:8000/api/uploadfile/', {
+        fetch('/api/v1/uploadfile/', {
             method: 'POST',
             body: data,
-            mode: 'no-cors'
         }).then((response) => {
             return response.text()
         }).then((text) => {

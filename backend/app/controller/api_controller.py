@@ -1,6 +1,6 @@
 from fastapi import APIRouter, UploadFile
 
-controller = APIRouter(prefix='/api')
+controller = APIRouter(prefix='/api/v1')
 
 
 @controller.get("/hello/")
