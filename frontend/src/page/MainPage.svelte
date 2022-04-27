@@ -7,7 +7,7 @@
 
     const opts: FileDropOptions = {
         hideInput: false,
-        accept: "image/*",
+        accept: ".csv",
         multiple: false
     }
 
