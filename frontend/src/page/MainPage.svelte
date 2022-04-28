@@ -4,13 +4,15 @@
     import AnimationBackground from "../component/AnimationBackground.svelte";
     import FileCard from "../component/FileCard.svelte";
     import Loader from "../component/Loader.svelte";
+    import InputField from "../component/InputField.svelte";
 
     const opts: FileDropOptions = {
         accept: ".csv, image/*",
         multiple: false
     }
-
     const productName = 'ВзлетИИ'
+
+    let regressionCol: string;
     let files: Files;
     let loading: boolean = false;
 
@@ -25,6 +27,9 @@
         loading = true;
         const data = new FormData();
         data.append('file', files.accepted[0])
+        data.append('regression_column_name', regressionCol)
+
+
         const server = 'http://localhost:8000'
         fetch(`${server}/api/v1/upload/`, {
             method: 'POST',
@@ -65,6 +70,11 @@
                         <h1>{productName}</h1>
                     </div>
                     <div class="form-content">
+                        <InputField
+                                bind:value={regressionCol}
+                                label="Название колонки"
+                                info="Название колонки для регрессии"
+                        />
                         <h4>Загрузите датасет</h4>
                         <FileDrop {...opts} on:filedrop={handleFilesSelect}/>
                         {#if files}
