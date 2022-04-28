@@ -33,10 +33,18 @@
             method: 'POST',
             body: data,
         }).then((response) => {
-            return response.json()
+            if (response.ok)
+                return response.json();
+            else
+                throw response.json();
         }).then((json) => {
-            fetch(`/api/v1/download?file_name=${json.filename}`)
-                .then(res => res.blob())
+            fetch(`/api/v1/download?project_name=${json.projectname}&&file_name=${json.filename}`)
+                .then((res) => {
+                    if (res.ok)
+                        return res.blob();
+                    else
+                        throw res.json();
+                })
                 .then(blob => {
                     let link = document.createElement('a');
                     link.download = json.filename;
@@ -45,9 +53,20 @@
                     URL.revokeObjectURL(link.href);
                     link.remove();
 
+                    regressionCol = ''
                     files = undefined;
                     loading = false;
-                });
+                }).catch((reason) => {
+                console.error(reason)
+                regressionCol = ''
+                files = undefined;
+                loading = false;
+            });
+        }).catch((reason) => {
+            console.error(reason)
+            regressionCol = ''
+            files = undefined;
+            loading = false;
         });
     }
 

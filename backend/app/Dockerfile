@@ -8,6 +8,8 @@ COPY ./requirements.txt /code/app/requirements.txt
 
 RUN pip install --no-cache-dir --upgrade -r /code/app/requirements.txt
 
+RUN pip install catboost
+
 RUN pip install uvicorn
 
 COPY . /code/app
