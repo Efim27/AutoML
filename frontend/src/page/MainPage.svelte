@@ -37,7 +37,7 @@
                 return response.json();
             else
                 throw response.json();
-        }).then((json) => {
+        }).then((json: { projectname: string, filename: string }) => {
             fetch(`/api/v1/download?project_name=${json.projectname}&&file_name=${json.filename}`)
                 .then((res) => {
                     if (res.ok)
