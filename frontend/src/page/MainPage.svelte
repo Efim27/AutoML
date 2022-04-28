@@ -6,7 +6,7 @@
     import Loader from "../component/Loader.svelte";
 
     const opts: FileDropOptions = {
-        accept: "image/*",
+        accept: ".csv",
         multiple: false
     }
 
@@ -25,14 +25,25 @@
         loading = true;
         const data = new FormData();
         data.append('file', files.accepted[0])
-        fetch('/api/v1/uploadfile/', {
+        fetch('/api/v1/upload/', {
             method: 'POST',
             body: data,
         }).then((response) => {
-            return response.text()
-        }).then((text) => {
-            console.log(text)
-            setTimeout(() => loading = false, 3000);
+            return response.json()
+        }).then((json) => {
+            fetch(`/api/v1/download?file_name=${json.filename}`)
+                .then(res => res.blob())
+                .then(blob => {
+                    let link = document.createElement('a');
+                    link.download = json.filename;
+                    link.href = URL.createObjectURL(blob);
+                    link.click();
+                    URL.revokeObjectURL(link.href);
+                    link.remove();
+
+                    files = undefined;
+                    loading = false;
+                });
         });
     }
 
@@ -41,7 +52,7 @@
 <svelte:head>
     <title>{productName}</title>
 </svelte:head>
-<Loader bind:loading />
+<Loader bind:loading/>
 <AnimationBackground>
     <main id="app">
         <div class="content">
@@ -54,9 +65,11 @@
                         <h4>Загрузите датасет</h4>
                         <FileDrop {...opts} on:filedrop={handleFilesSelect}/>
                         {#if files}
-                            {#each files.accepted as file}
-                                <FileCard {file}/>
-                            {/each}
+                            <div class="uploaded-files">
+                                {#each files.accepted as file}
+                                    <FileCard {file}/>
+                                {/each}
+                            </div>
                         {/if}
                     </div>
                     <div class="form-footer">
@@ -85,8 +98,11 @@
     }
 
     .form {
-        width: max(30vw, 300px);
-        min-height: 300px;
+        width: max(30vw, 400px);
+        min-height: 320px;
+        max-height: 80vh;
+
+        margin: 0 1rem;
 
         background: white;
         padding: 1rem;
@@ -115,7 +131,30 @@
     }
 
     .form-content h4 {
-        margin-left: 1rem;
+        margin-left: .25rem;
+        margin-bottom: -.5rem;
+    }
+
+    .uploaded-files {
+        width: 100%;
+        max-height: 30vh;
+
+        overflow-y: scroll;
+        border-radius: 10px;
+    }
+
+    .uploaded-files::-webkit-scrollbar {
+        width: .5rem;
+    }
+
+    .uploaded-files::-webkit-scrollbar-track {
+        background: inherit; /* цвет дорожки */
+    }
+
+    .uploaded-files::-webkit-scrollbar-thumb {
+        background-color: silver; /* цвет плашки */
+        border-radius: 20px; /* закругления плашки */
+        border: 1px solid silver; /* padding вокруг плашки */
     }
 
     .form-footer {
