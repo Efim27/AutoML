@@ -1,7 +1,7 @@
 import os
 import uuid
 
-from fastapi import APIRouter, UploadFile, HTTPException, status
+from fastapi import APIRouter, Form, File, UploadFile, HTTPException, status
 from fastapi.responses import FileResponse
 
 controller = APIRouter(prefix='/api/v1')
@@ -24,14 +24,15 @@ def create_file(file: UploadFile) -> str:
 
 
 @controller.post("/upload/")
-def upload_file(file: UploadFile) -> dict:
+def upload_file(file: UploadFile = File(...), regression_column_name: str = Form(...)) -> dict:
+    print(regression_column_name)
     file_name = create_file(file)
     return {"filename": file_name}
 
 
 @controller.get("/download", response_class=FileResponse)
 async def download_file(file_name: str = ''):
-    if file_name is '':
+    if file_name == '':
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
             detail="The file name should not be empty."
