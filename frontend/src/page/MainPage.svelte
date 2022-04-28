@@ -6,8 +6,7 @@
     import Loader from "../component/Loader.svelte";
 
     const opts: FileDropOptions = {
-        hideInput: false,
-        accept: ".csv",
+        accept: "image/*",
         multiple: false
     }
 

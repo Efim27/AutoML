@@ -11,6 +11,9 @@
         margin: 0;
         padding: 0;
 
+        font-weight: 400;
+        font-family: IBM Plex Sans, Helvetica Neue, Arial, sans-serif;
+
         background: #999999;
     }
 </style>
