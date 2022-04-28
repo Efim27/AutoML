@@ -132,5 +132,5 @@ dmypy.json
 .idea
 
 backend/app/catboost/env
-backend/app/catboost/catboost_info
+backend/catboost_info
 backend/app/catboost/projects
