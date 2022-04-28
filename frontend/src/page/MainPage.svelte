@@ -6,7 +6,7 @@
     import Loader from "../component/Loader.svelte";
 
     const opts: FileDropOptions = {
-        accept: ".csv",
+        accept: ".csv, image/*",
         multiple: false
     }
 
@@ -25,13 +25,16 @@
         loading = true;
         const data = new FormData();
         data.append('file', files.accepted[0])
-        fetch('/api/v1/upload/', {
+        const server = 'http://localhost:8000'
+        fetch(`${server}/api/v1/upload/`, {
             method: 'POST',
             body: data,
         }).then((response) => {
             return response.json()
         }).then((json) => {
-            fetch(`/api/v1/download?file_name=${json.filename}`)
+            fetch(`${server}/api/v1/download?file_name=${json.filename}`, {
+                method: 'GET'
+            })
                 .then(res => res.blob())
                 .then(blob => {
                     let link = document.createElement('a');
